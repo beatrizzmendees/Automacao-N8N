@@ -1,0 +1,191 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Fluxo que me mande um resumo da minha base de vendas que estão na planilha.",
+        "height": 80,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "c526b9fc-321a-415f-a9bb-06e57c58d96d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        -16
+      ],
+      "id": "03a866ab-4133-4ca4-87d8-27ec8d3cba78",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1unWAOApRsOgDmMXCjyS8OVW_GCXdZBL1P2hBkRRtqI0",
+          "mode": "list",
+          "cachedResultName": "Base de Vendas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1unWAOApRsOgDmMXCjyS8OVW_GCXdZBL1P2hBkRRtqI0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Vendas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1unWAOApRsOgDmMXCjyS8OVW_GCXdZBL1P2hBkRRtqI0/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -128,
+        -16
+      ],
+      "id": "78c29900-084d-4860-a185-0a67fe7a0b83",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "0R6SOP6Zqybf5XQg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "sum",
+              "field": "Valor Total"
+            }
+          ]
+        },
+        "fieldsToSplitBy": "Produto",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        96,
+        -16
+      ],
+      "id": "3f32ec0e-d1bb-48b2-9f74-586c787611c0",
+      "name": "Summarize"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "fileName": "Relatório de Vendas"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        -16
+      ],
+      "id": "c3a889f8-a9db-49c2-be33-a9033cbca89d",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "sendTo": "beatrizmendes@asimovjr.com.br",
+        "subject": "Relatório de Vendas",
+        "message": "Olá! Segue em anexo o relatório de vendas.",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        544,
+        -16
+      ],
+      "id": "21239a1d-028a-4400-9c7a-69b91fb20510",
+      "name": "Send a message",
+      "webhookId": "3dfed7be-bdfc-4e18-ac01-0e75b8e08b8e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JZFslhytrPK9HrPn",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Summarize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "4f9ffab8-d1a5-4b3b-80b8-9eb515ff975a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8f611a25cdbf174392bde6ad00c302d883ddb957d3eb530b81c46d1730a24ee0"
+  },
+  "nodeGroups": [],
+  "id": "0JQdBUgFNeXpF78r",
+  "tags": []
+}
